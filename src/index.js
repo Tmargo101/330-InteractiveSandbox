@@ -1,11 +1,12 @@
 // IGME-330 Project 1
+(function (){
 
 'use strict';
 let canvas, ctx;
 let paused = true;
 
 const windowParams = {
-   "fps" : 12,
+   "fps" : 10,
    "fadeOut" : false,
    "fadeSpeed" : 5,
    "canvasWidth" :  800,
@@ -19,146 +20,217 @@ const lifeParams = {
    "numRows" : 80,
    "numCols" : 60,
    "percentAlive" : 0.2,
-   "randomSetupOnNext" : true
+   "randomSetupOnNext" : false
 }
 
-
+const UI = {
+   // Controls added in method setupButtons()
+}
 
 window.onload = init;
 
 function init() {
+   // Grab canvas & set width / height
    canvas = document.querySelector('canvas');
    ctx = canvas.getContext('2d');
-
    canvas.width = windowParams.canvasWidth;
    canvas.height = windowParams.canvasHeight;
 
+   // Select all buttons in the UI & set starting positions
+   setupButtons();
+
    // Assign event handlers to buttons
-   setupUI();
+   assignEventHandlers();
 
    //Add click ability to canvasWidth
    canvas.onclick = canvasClicked;
 
-
    // Create the world
    lifeWorld = new Lifeworld(lifeParams.numRows,lifeParams.numCols,lifeParams.percentAlive);
-   if (lifeParams.randomSetupOnNext == true) { lifeWorld.randomSetup(); }
+   if (lifeParams.randomSetupOnNext == true) {
+      lifeWorld.randomSetup();
+   }
+
+   // Draw the first frame
    drawBackground();
+   drawWorld();
 
+   // Start the loop
    loop();
-
 }
 
-function setupUI() {
-   
-   // Play / Pause Controls
-   document.querySelector('#playPauseButton').onclick = function() {
-      let playPauseButton = document.querySelector("#playPauseButton");
-      let stepButton = document.querySelector("#stepButton")
+function setupButtons() {
+   // Assign controls to values in the controls array
+
+   // Play pause button
+   UI.playPauseButton = document.querySelector('#playPauseButton');
+   UI.fpsSlider = document.querySelector('#fpsSlider');
+   UI.fpsDisplay = document.querySelector('#fpsDisplay')
+   UI.stepButton = document.querySelector('#stepButton');
+
+   // Creation Controls
+   UI.shapeSelector = document.querySelector('#shapeType');
+
+   // World controls
+   UI.clearButton = document.querySelector('#clearButton');
+   UI.exportButton = document.querySelector('#exportButton');
+   UI.rebuildWorldButton = document.querySelector('#rebuildWorldButton');
+   UI.fadeOutCheckbox = document.querySelector('#fadeOutCheckbox');
+   UI.fadeSpeedSlider = document.querySelector('#fadeSpeedSlider');
+   UI.randomSetupCheckbox = document.querySelector('#randomSetupCheckbox');
+   UI.percentAliveSlider = document.querySelector('#percentAliveSlider');
+   UI.percentAliveDisplay = document.querySelector('#percentAliveDisplay');
+   UI.gridSizeSelector = document.querySelector('#gridSize');
+
+
+   // Set controls to values from code
+   UI.fpsSlider.value = windowParams.fps;
+   UI.fpsDisplay.innerHTML = `Current: ${windowParams.fps}`;
+   UI.fadeOutCheckbox.value = windowParams.fadeOut;
+   UI.fadeSpeedSlider.value = windowParams.fadeSpeed;
+   UI.randomSetupCheckbox.checked = lifeParams.randomSetupOnNext;
+
+   // Disable controls
+   UI.fadeSpeedSlider.disabled = true;
+   UI.percentAliveSlider.disabled = true;
+}
+
+function assignEventHandlers() {
+
+   // Play Pause Controls
+   UI.playPauseButton.onclick = function() {
       paused = !paused;
       if (paused) {
-         playPauseButton.innerHTML = "Play";
-         stepButton.disabled = false; 
+         UI.playPauseButton.innerHTML = "Play";
+         UI.stepButton.disabled = false;
       } else {
-         playPauseButton.innerHTML = "Pause";
-         stepButton.disabled = true; 
-
-
+         UI.playPauseButton.innerHTML = "Pause";
+         UI.stepButton.disabled = true;
       }
    }
-   
-   document.querySelector("#stepButton").onclick = function(e) {
+
+   // Change FPS
+   UI.fpsSlider.oninput = function() {
+      windowParams.fps = this.value;
+      UI.fpsDisplay.innerHTML = `Current: ${this.value}`;
+   }
+
+   // Step forward one frame
+   UI.stepButton.onclick = function(e) {
       drawBackground();
       drawWorld();
       lifeWorld.step();
    }
-   
-   document.querySelector('#fpsSlider').oninput = function() {
-      windowParams.fps = this.value;
-      document.querySelector("#currentFps").innerHTML = `Current: ${this.value}`;
-   }
 
-   
+   // Creation Controls
 
+   // World Controls
 
    // Export current state as photo
-   document.querySelector("#exportButton").onclick = function(e) {
+   UI.exportButton.onclick = function(e) {
       txmLIB.doExport(canvas);
    };
 
-   // Reset world
-   document.querySelector("#clearButton").onclick = function(e) {
-      txmLIB.clearCanvas(ctx);
-   }
 
-
-   document.querySelector("#fadeOutCheckbox").onchange = function() {
+   // Enable / disable fade out functionality
+   UI.fadeOutCheckbox.onchange = function() {
       windowParams.fadeOut = !windowParams.fadeOut;
-   }
-   
-   document.querySelector("#randomSetupCheckbox").onchange = function() {
-      lifeParams.randomSetupOnNext = !lifeParams.randomSetupOnNext;
+      UI.fadeSpeedSlider.disabled = !UI.fadeSpeedSlider.disabled;
    }
 
-   document.querySelector('#percentAliveSlider').oninput = function() {
-      document.querySelector("#currentPercentAlive").innerHTML = `Current: ${this.value}%`;
-
-      let percentValue = this.value / 100;
-      console.log("New value: " + percentValue);
-      lifeParams.percentAlive = percentValue;
-   }
-
-
-   document.querySelector('#fadeSpeedSlider').oninput = function() {
+   // Change fade speed
+   UI.fadeSpeedSlider.oninput = function() {
       windowParams.fadeSpeed = this.value;
    }
 
 
+   // Enable / disable random generation on next world rebuild
+   UI.randomSetupCheckbox.onchange = function() {
+      lifeParams.randomSetupOnNext = !lifeParams.randomSetupOnNext;
+      UI.percentAliveSlider.disabled = !UI.percentAliveSlider;
+   }
 
-   document.querySelector('#rebuildWorld').onclick = function(e) {
+   // Change percent of cells alive on next world rebuild
+   UI.percentAliveSlider.oninput = function() {
+      let percentValue = this.value / 100;
+      lifeParams.percentAlive = percentValue;
+      UI.percentAliveDisplay.innerHTML = `Current: ${this.value}%`;
+   }
+
+   // Rebuild the world with the new specifications
+   UI.rebuildWorldButton.onclick = function(e) {
       resetWorld();
       if (lifeParams.randomSetupOnNext == true) { lifeWorld.randomSetup();}
+      drawBackground();
+      drawWorld();
    }
 }
 
 function canvasClicked(e){
    let rect = e.target.getBoundingClientRect();
-   let mouseX = Math.round((e.clientX - rect.x) / 10) - 1;
-   let mouseY = Math.round((e.clientY - rect.y) / 10) - 1;
-   
-   // TODO: Move this to it's own function
-   // TODO: Create shapes array to hold shape data?
-   if (document.querySelector("#shapeType").value == "gun") {
-      console.log("Drawing gun");
-      lifeWorld.changeCell(mouseX - 1, mouseY - 1, 1);
-      lifeWorld.changeCell(mouseX, mouseY - 1, 1);
-      lifeWorld.changeCell(mouseX + 1, mouseY - 1, 1);
-      lifeWorld.changeCell(mouseX - 1, mouseY, 1);
-      lifeWorld.changeCell(mouseX, mouseY + 1, 1);
-      drawCell(mouseX - 1, mouseY - 1, lifeParams.cellSize, 1);
-      drawCell(mouseX, mouseY - 1, lifeParams.cellSize, 1);
-      drawCell(mouseX + 1, mouseY - 1, lifeParams.cellSize, 1);
-      drawCell(mouseX - 1, mouseY, lifeParams.cellSize, 1);
-      drawCell(mouseX, mouseY + 1, lifeParams.cellSize, 1);
-
-
-   } else {
-      lifeWorld.changeCell(mouseX, mouseY, 1);
-      drawCell(mouseX, mouseY, lifeParams.cellSize, 1);
+   let offset = 1;
+   switch (lifeParams.cellSize) {
+      case 10:
+         offset = 1;
+         break;
+      case 20:
+         offset = 0;
+         break;
    }
-   console.log(mouseX,mouseY);
+   // let sub = txmLIB.firstDigit(lifeParams.cellSize);
+   console.log(`clientRectX: ${e.clientX}, rectX = ${rect.x}`)
+   let mouseX = Math.round((e.clientX - rect.x) / lifeParams.cellSize) - 1;
+   let mouseY = Math.round((e.clientY - rect.y) / lifeParams.cellSize) - 1;
+   console.log(`mouseX: ${mouseX}, mouseY: ${mouseY}`);
+   console.log(UI.shapeSelector.value);
+   switch (UI.shapeSelector.value) {
+      case "gun":
+         createGlider(mouseX, mouseY);
+         break;
+      default:
+         drawNewCell(mouseX, mouseY, 1)
+         break;
+
+   }
+   // console.log(mouseX,mouseY);
 }
 
-function createGlider(mouseX, mouseY) {
+function drawNewCell(x, y, cellStatus) {
+   if (lifeWorld.getCell(x, y) == 1) {
+      console.log("Cell occupied");
+      lifeWorld.changeCell(x, y, 0);
+      drawCell(x,y,lifeParams.cellSize, 0);
+   } else {
+      lifeWorld.changeCell(x, y, cellStatus);
+      drawCell(x, y, lifeParams.cellSize, 2);
+   }
 
+}
+function createGlider(mouseX, mouseY) {
+   // TODO: Create shapes array to hold shape data?
+   drawNewCell(mouseX - 1, mouseY - 1, 1);
+   drawNewCell(mouseX, mouseY - 1, 1);
+   drawNewCell(mouseX + 1, mouseY - 1, 1);
+   drawNewCell(mouseX - 1, mouseY, 1);
+   drawNewCell(mouseX, mouseY + 1, 1);
 }
 
 
 function resetWorld() {
-   txmLIB.clearCanvas(ctx);
+   txmLIB.clearCanvas(ctx, windowParams);
+   switch(UI.gridSizeSelector.value) {
+      case "small":
+         lifeParams.numRows = 80;
+         lifeParams.numCols = 60;
+         lifeParams.cellSize = 10;
+         break;
+      case "large":
+         lifeParams.numRows = 40;
+         lifeParams.numCols = 30;
+         lifeParams.cellSize = 20;
+         break;
+   }
    lifeWorld = new Lifeworld(lifeParams.numRows,lifeParams.numCols,lifeParams.percentAlive);
-   // lifeWorld.randomSetup();
-   paused = false;
 }
 
 function loop(){
@@ -191,21 +263,34 @@ function drawWorld(){
 }
 
 function drawCell(col,row,dimensions,alive) {
-	// TODO: implement
-   if (alive == 1) {
-      ctx.beginPath();
-      let img = document.querySelector("#emoji");
-      ctx.drawImage(img, col*dimensions, row*dimensions);
-      ctx.fill();
-   }
+	/// TODO: implement states
+   /// Alive: 0 = dead, 1 = alive, 2 = newly created, 3 = dying
 
-   if (alive == 2) {
-      ctx.beginPath();
-      ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
-      ctx.fillStyle = alive ? "red" : "rgba(0,0,0,0)";
-      ctx.fill();
+   switch (alive) {
+      case 0:
+         ctx.beginPath();
+         ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
+         ctx.fillStyle = "black";
+         ctx.fill();
+
+         break;
+      case 1:
+         ctx.beginPath();
+         let img = document.querySelector("#emoji");
+         ctx.drawImage(img, col*dimensions, row*dimensions);
+         ctx.fill();
+         break;
+      case 2:
+         ctx.beginPath();
+         ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
+         ctx.fillStyle = "red";
+         ctx.fill();
+         break;
+      default:
+         break;
    }
 
    // ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
    // ctx.fillStyle = alive ? "red" : "rgba(0,0,0,0)";
 }
+})();

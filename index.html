@@ -15,22 +15,21 @@
       <hr>
       <section id="playPauseControls">
          <h2>Play / Pause Controls</h2>
-         <button id="playPauseButton">Begin</button><br>
-         <button id="stepButton" disabled>Step forward 1 frame</button>
+         <button id="playPauseButton">Play</button><br>
          <br>
          <label> Steps per second:<br>
             <span>1</span>
             <input type="range" min="1" max="20" value="10" id="fpsSlider">
             <span>20</span>
             <br>
-            <span id="currentFps">Current: 10</span>
+            <span id="fpsDisplay">Current: 10</span>
          </label>
-         
          <br>
+         <button id="stepButton">Step forward 1 frame</button>
       </section>
-      
+
       <hr>
-      
+
       <section id="createObjectControls">
          <h2>Creation Controls</h2>
 
@@ -43,24 +42,21 @@
             </select>
          </label>
       </section>
-      
+
       <hr>
 
       <section id="worldControls">
          <h2>World Controls</h2>
 
-         <button id="clearButton" value="Clear">Clear</button>
          <button id="exportButton" type="button" value="Export">Export</button>
-         <button id="rebuildWorld" value="Reset">Rebuild World</button>
 
          <br>
 
-         <label>Fade Out: <input type="checkbox" id="fadeOutCheckbox">
-         </label>
-         
+         <label>Fade Out: <input type="checkbox" id="fadeOutCheckbox"></label>
+
          <br>
 
-         
+
          <label>Speed:<br>
             <span>Slow</span><input type="range" min="1" max="10" value="5" id="fadeSpeedSlider"><span>Fast</span><br>
          </label>
@@ -69,15 +65,26 @@
          <label>Generate Random on Rebuild:<input type="checkbox" id="randomSetupCheckbox" checked></label>
          <br>
          <label> Percent Alive:<br>
-            <span>5%</span><input type="range" min="5" max="50" value="10" id="percentAliveSlider"><span>50%</span><br><span id="currentPercentAlive">Current: 10%</span>
+            <span>5%</span><input type="range" min="5" max="50" value="10" id="percentAliveSlider"><span>50%</span><br><span id="percentAliveDisplay">Current: 10%</span>
          </label>
+
+         <br>
+         <label>Grid size:
+            <select id="gridSize">
+               <option value="small" selected>Small (80x60)</option>
+               <option value="large">Large (40x30)</option>
+            </select>
+         </label>
+
+         <button id="rebuildWorldButton">Rebuild World</button>
+
 
 
       </section>
-      
+
       <hr>
 
-      <img id="emoji" alt="emoji" src="grimacing-face-emoji-small.png" />
+      <img id="emoji" alt="emoji" src="grimacing-face-emoji-smaller.png" />
 
 
    </body>
