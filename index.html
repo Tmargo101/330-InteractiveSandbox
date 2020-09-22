@@ -3,8 +3,66 @@
    <head>
       <meta charset="utf-8">
       <title>IGME-330 Project 1</title>
+      <link href="styles/default-styles.css" rel="stylesheet"/>
+      <script src="src/Lifeworld.js"></script>
+      <script src="src/txmLIB.js"></script>
+      <script src="src/index.js"></script>
    </head>
    <body>
+      <canvas>
+      </canvas>
+      <section id="worldControls">
+         <h1>World Controls</h1><h3>Will not change until the "rebuild world" button is pressed.</h3>
+         <hr>
+         <label> Steps per second:<br>
+            <span>1</span><input type="range" min="1" max="20" value="10" id="fpsSlider"><span>20</span><br><span id="currentFps">Current: 10</span>
+         </label>
+         <hr>
+
+         <button id="pauseButton">Pause</button>
+         <button id="playButton">Play</button>
+         <button id="clearButton" value="Clear">Clear</button>
+         <button id="exportButton" type="button" value="Export">Export</button>
+         <button id="rebuildWorld" value="Reset">Rebuild World</button>
+         <button id="randomSetupButton">Random Setup</button>
+         <button id="stepButton">Step forward 1 frame</button>
+
+         <hr>
+
+         <label>Fade Out: <input type="checkbox" id="fadeOutCheckbox"></label>
+         <br>
+         <label>Speed:
+            <span>Slow</span><input type="range" min="1" max="10" value="5" id="fadeSpeedSlider"><span>Fast</span><br>
+         </label>
+
+         <hr>
+
+         <label>Generate Random on Rebuild:<input type="checkbox" id="generateRandomCheckbox"></label>
+         <br>
+         <label> Percent Alive:<br>
+            <span>5%</span><input type="range" min="5" max="50" value="10" id="percentAliveSlider"><span>50%</span><br><span id="currentPercentAlive">Current: 10%</span>
+         </label>
+
+         <hr>
+
+      </section>
+      <section id="createObjectControls">
+         <h1>Creation Controls</h1>
+
+         <label>Shape:
+            <select id="shapeType">
+               <option value="gun" selected>Gun</option>
+               <option value="medium">Town</option>
+               <option value="large">City</option>
+               <option value="xl">Big City</option>
+            </select>
+       </label>
+       <button id="createNewObjectButton" type="button" value="Create Object">Create Object</button>
+
+
+      </section>
+      <img id="emoji" src="grimacing-face-emoji-small.png" />
+
 
    </body>
 </html>

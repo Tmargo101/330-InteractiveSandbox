@@ -1,1 +1,9 @@
 /* Interactive Sandbox */
+
+canvas {
+   border: 2px solid #ccc;
+}
+
+button {
+   font-size: 1.2em;
+}
