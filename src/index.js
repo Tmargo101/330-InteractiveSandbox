@@ -3,8 +3,7 @@
 
 'use strict';
 let canvas, ctx;
-let paused = true;
-let drawing = false;
+let paused = true, drawing = false;
 
 const windowParams = {
    "fps" : 10,
@@ -12,7 +11,8 @@ const windowParams = {
    "fadeSpeed" : 5,
    "canvasWidth" :  800,
    "canvasHeight" : 600,
-   "freehandDrawing" : false
+   "freehandDrawing" : false,
+   "theme" : "colors"
 }
 
 
@@ -45,24 +45,6 @@ function init() {
    assignEventHandlers();
 
    //Add click ability to canvasWidth
-   // canvas.onclick = canvasClicked;
-   // canvas.addEventListener("touchmove", canvasClicked);
-   canvas.addEventListener("mouseup", function() {
-      drawing = false;
-   });
-   canvas.addEventListener("mousedown", function(e) {
-      drawing = true;
-      canvasClicked(e);
-   });
-   canvas.addEventListener("mousemove", function(e) {
-      if (drawing && windowParams.freehandDrawing == true) {
-         canvasClicked(e);
-      }
-   });
-
-   canvas.addEventListener("mouseout", function(e) {
-      drawing = false;
-   });
 
    // Create the world & generate random board if enabled
    lifeWorld = new Lifeworld(lifeParams.numRows,lifeParams.numCols,lifeParams.percentAlive);
@@ -101,6 +83,7 @@ function setupButtons() {
    UI.percentAliveSlider = document.querySelector('#percentAliveSlider');
    UI.percentAliveDisplay = document.querySelector('#percentAliveDisplay');
    UI.gridSizeSelector = document.querySelector('#gridSize');
+   UI.themeSelector = document.querySelector('#themeSelector');
 
 
    // Set controls to values from code
@@ -110,6 +93,7 @@ function setupButtons() {
    UI.fadeSpeedSlider.value = windowParams.fadeSpeed;
    UI.randomSetupCheckbox.checked = lifeParams.randomSetupOnNext;
    UI.freehandDrawingCheckbox.checked = windowParams.freehandDrawing;
+   UI.themeSelector.value = windowParams.theme;
 
    // Disable controls
    UI.fadeSpeedSlider.disabled = true;
@@ -190,6 +174,23 @@ function assignEventHandlers() {
       drawBackground();
       drawWorld();
    }
+
+   canvas.addEventListener("mouseup", function() {
+      drawing = false;
+   });
+   canvas.addEventListener("mousedown", function(e) {
+      drawing = true;
+      canvasClicked(e);
+   });
+   canvas.addEventListener("mousemove", function(e) {
+      if (drawing && windowParams.freehandDrawing == true) {
+         canvasClicked(e);
+      }
+   });
+   canvas.addEventListener("mouseout", function(e) {
+      drawing = false;
+   });
+
 }
 
 function canvasClicked(e){
@@ -232,7 +233,7 @@ function drawNewCell(x, y, ignoreExisting = false) {
       drawCell(x,y,lifeParams.cellSize, 2);
    } else if (lifeWorld.getCell(x, y) == 1) {
      lifeWorld.changeCell(x, y, 0);
-     drawCell(x,y,lifeParams.cellSize, 0);
+     drawCell(x,y,lifeParams.cellSize, 3);
   } else {
       lifeWorld.changeCell(x, y, 1);
       drawCell(x, y, lifeParams.cellSize, 2);
@@ -280,9 +281,10 @@ function createSpaceship(mouseX, mouseY) {
    drawNewCell(mouseX + 2, mouseY - 1);
 }
 
-
+// Resets grid & performs resize operation if selected
 function resetWorld() {
    txmLIB.clearCanvas(ctx, windowParams);
+   windowParams.theme = UI.themeSelector.value;
    switch(UI.gridSizeSelector.value) {
       case "small":
          lifeParams.numRows = 80;
@@ -298,6 +300,7 @@ function resetWorld() {
    lifeWorld = new Lifeworld(lifeParams.numRows,lifeParams.numCols,lifeParams.percentAlive);
 }
 
+// Runs the loop
 function loop(){
    setTimeout(loop,1000/windowParams.fps);
    // TODO: update lifeworld
@@ -311,13 +314,12 @@ function loop(){
 function drawBackground(){
 	ctx.save();
 	ctx.fillStyle = "black";
-	if (windowParams.fadeOut == true) { ctx.globalAlpha = windowParams.fadeSpeed/windowParams.fps; }
+	if (windowParams.fadeOut == true) { ctx.globalAlpha = windowParams.fadeSpeed / windowParams.fps; }
 	ctx.fillRect(0,0,windowParams.canvasWidth,windowParams.canvasHeight);
 	ctx.restore();
 }
 
 function drawWorld(){
-	// TODO: implement
    ctx.save();
    for (let col = 0; col < lifeWorld.numCols; col++) {
       for(let row = 0; row < lifeWorld.numRows; row++) {
@@ -328,30 +330,48 @@ function drawWorld(){
 }
 
 function drawCell(col,row,dimensions,alive) {
-
+/*
+alive states:
+1: alive
+2: newborn
+3: dead
+4:
+*/
+   let img;
    switch (alive) {
-      case 0:
+      case 1:
+         ctx.beginPath();
+         if (windowParams.theme == "emoji") {
+            if (dimensions == 10) {img = document.querySelector("#smallEmoji");}
+            if (dimensions == 20) {img = document.querySelector("#largeEmoji");}
+            ctx.drawImage(img, col*dimensions, row*dimensions);
+         } else {
+            ctx.fillStyle = "yellow";
+            ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
+         }
+
+         ctx.fill();
+         break;
+      case 2:
+         ctx.beginPath();
+         if (windowParams.theme == "emoji") {
+            if (dimensions == 10) {img = document.querySelector("#smallBaby");}
+            if (dimensions == 20) {img = document.querySelector("#largeBaby");}
+            ctx.drawImage(img, col*dimensions, row*dimensions);
+         } else {
+            ctx.fillStyle = "red";
+            ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
+         }
+         // ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
+
+         ctx.fill();
+         break;
+      case 3:
          ctx.beginPath();
          ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
          ctx.fillStyle = "black";
          ctx.fill();
 
-         break;
-      case 1:
-         ctx.beginPath();
-         let img;
-         if (dimensions == 10) {img = document.querySelector("#smallEmoji");}
-         if (dimensions == 20) {img = document.querySelector("#largeEmoji");}
-
-
-         ctx.drawImage(img, col*dimensions, row*dimensions);
-         ctx.fill();
-         break;
-      case 2:
-         ctx.beginPath();
-         ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
-         ctx.fillStyle = "red";
-         ctx.fill();
          break;
       default:
          break;

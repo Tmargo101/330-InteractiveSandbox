@@ -7,3 +7,25 @@ canvas {
 button {
    font-size: 1.2em;
 }
+
+#topRow {
+  /* width: 80%;
+  height: 200px;
+  background: aqua;
+  margin: auto;
+  padding: 10px; */
+}
+
+#canvasDiv {
+  /* width: 80%;
+  height: 200px;
+  background: red;
+  float: left; */
+}
+
+#playPauseControlsDiv {
+  /* margin-left: 15%;
+  height: 200px;
+  background: black;
+  float: right; */
+}

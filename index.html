@@ -10,24 +10,38 @@
    </head>
    <body>
       <!-- TODO: Add popup when loaded to set default options; dismissing starts playing. -->
-      <canvas>
-      </canvas>
-      <hr>
-      <section id="playPauseControls">
-         <h2>Play / Pause Controls</h2>
-         <button id="playPauseButton">Play</button><br>
-         <br>
-         <label> Steps per second:<br>
-            <span>1</span>
-            <input type="range" min="1" max="20" value="10" id="fpsSlider">
-            <span>20</span>
-            <br>
-            <span id="fpsDisplay">Current: 10</span>
-         </label>
-         <br>
-         <button id="stepButton">Step forward 1 frame</button>
-      </section>
+      <div id="topRow">
+         <div id="canvasDiv">
+            <canvas></canvas>
+         </div>
+         <div id="playPauseControlsDiv">
+            <section id="playPauseControls">
+               <h2>Play / Pause Controls</h2>
+               <button id="playPauseButton">Play</button><br>
+               <br>
+               <label> Steps per second:<br>
+                  <span>1</span>
+                  <input type="range" min="1" max="20" value="10" id="fpsSlider">
+                  <span>20</span>
+                  <br>
+                  <span id="fpsDisplay">Current: 10</span>
+               </label>
+               <br>
+               <button id="stepButton">Step forward 1 frame</button>
 
+               <br>
+               <label>Fade Out: <input type="checkbox" id="fadeOutCheckbox"></label>
+
+               <br>
+
+
+               <label>Speed:<br>
+                  <span>Slow</span><input type="range" min="1" max="10" value="5" id="fadeSpeedSlider"><span>Fast</span><br>
+               </label>
+
+            </section>
+         </div>
+      </div>
       <hr>
 
       <section id="createObjectControls">
@@ -54,16 +68,6 @@
 
          <br>
 
-         <label>Fade Out: <input type="checkbox" id="fadeOutCheckbox"></label>
-
-         <br>
-
-
-         <label>Speed:<br>
-            <span>Slow</span><input type="range" min="1" max="10" value="5" id="fadeSpeedSlider"><span>Fast</span><br>
-         </label>
-
-
          <label>Generate Random on Rebuild:<input type="checkbox" id="randomSetupCheckbox" checked></label>
          <br>
          <label> Percent Alive:<br>
@@ -78,6 +82,16 @@
             </select>
          </label>
 
+         <br>
+
+         <label>Theme:
+            <select id="themeSelector">
+               <option value="colors" selected>Colors</option>
+               <option value="emoji">Emoji</option>
+            </select>
+         </label>
+
+
          <button id="rebuildWorldButton">Rebuild World</button>
 
 
@@ -86,8 +100,11 @@
 
       <hr>
 
-      <img id="smallEmoji" alt="emoji" src="grimacing-face-emoji-small.png" />
-      <img id="largeEmoji" alt="emoji" src="grimacing-face-emoji-large.png" />
+      <img id="smallEmoji" alt="emoji" src="house-small.png" />
+      <img id="largeEmoji" alt="emoji" src="house-large.png" />
+
+      <img id="smallBaby" alt="emoji" src="building-small.png" />
+      <img id="largeBaby" alt="emoji" src="building-large.png" />
 
 
    </body>
