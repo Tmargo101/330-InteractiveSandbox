@@ -3,6 +3,7 @@
    <head>
       <meta charset="utf-8">
       <title>Conway's Game of Life</title>
+      <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
       <link href="styles/default-styles.css" rel="stylesheet"/>
       <script src="src/Lifeworld.js"></script>
       <script src="src/txmLIB.js"></script>
@@ -26,7 +27,7 @@
                   <button id="playPauseButton">Play</button>
                   <button id="stepButton">Step forward 1 frame</button>
                   <hr>
-                  <label> Steps per second:<br>
+                  <label class='roboto'> Steps per second:<br>
                      <span>1</span>
                      <input type="range" min="1" max="20" value="10" id="fpsSlider">
                      <span>20</span>
@@ -37,12 +38,12 @@
                   <div class="fadeOutDiv">
                      <div class="fadeOutCheckboxDiv">
                         <br>
-                        <label>Fade Out:
+                        <label class='roboto'>Fade Out:
                            <input type="checkbox" id="fadeOutCheckbox">
                         </label>
                      </div>
                      <div class="fadeOutSliderDiv">
-                        <label>
+                        <label class='roboto'>
                            <span>Slow</span><input type="range" min="1" max="10" value="5" id="fadeSpeedSlider"><span>Fast</span><br><br>
                         </label>
                      </div>
@@ -56,12 +57,12 @@
                   <div class="fadeOutDiv">
                      <div class="fadeOutCheckboxDiv">
                         <br>
-                        <label>Generate Random on Rebuild:
+                        <label class='roboto'>Generate Random on Rebuild:
                            <input type="checkbox" id="randomSetupCheckbox" checked>
                         </label>
                      </div>
                      <div class="fadeOutSliderDiv">
-                        <label> Percent Alive:<br>
+                        <label class='roboto'> Percent Alive:<br>
                            <span>5%</span><input type="range" min="5" max="50" value="10" id="percentAliveSlider"><span>50%</span><br><span id="percentAliveDisplay">Current: 10%</span>
                         </label>
                      </div>
@@ -69,7 +70,7 @@
                   <hr>
                   <div class="selectorsDiv">
                      <div class="cellSizeSelectorDiv">
-                        <label>Cell Size:
+                        <label class='roboto'>Cell Size:
                            <select id="gridSize">
                               <option value="small" selected>Small (80x60)</option>
                               <option value="large">Large (40x30)</option>
@@ -77,7 +78,7 @@
                         </label>
                      </div>
                      <div class="themeSelectorDiv">
-                        <label>Theme:
+                        <label class='roboto'>Theme:
                            <select id="themeSelector">
                               <option value="colors" selected>Colors</option>
                               <option value="emoji">Emoji</option>
@@ -99,13 +100,13 @@
                <div class="fadeOutDiv">
                   <div class="fadeOutCheckboxDiv">
                      <br><br>
-                     <label>Freehand drawing:
+                     <label class='roboto'>Freehand drawing:
                         <input type="checkbox" id="freehandDrawingCheckbox">
                      </label>
                   </div>
                   <div class="fadeOutSliderDiv">
                      <br>
-                     <label>Draw shape:
+                     <label class='roboto'>Draw shape:
                         <select id="shapeType">
                            <option value="single" selected>Single Pixel</option>
                            <option value="spaceship">Spaceship</option>
@@ -117,7 +118,7 @@
                   </div>
                </div>
                <hr>
-               <p>Click anywhere on the canvas to draw the shape you<br>have selected.
+               <p class='roboto'>Click anywhere on the canvas to draw the shape you<br>have selected.
                If the 'Freehand Drawing' option is checked, you<br>can drag your mouse around the canvas to draw.</p><br>
             </section>
          </div>
@@ -147,6 +148,8 @@
       <img id="largeEmoji" alt="emoji" src="house-large.png" />
       <img id="smallBaby" alt="emoji" src="building-small.png" />
       <img id="largeBaby" alt="emoji" src="building-large.png" />
+      <p id='roboto'>Roboto</p>
+
 </div>
 
    </body>

@@ -124,6 +124,10 @@ label {
    border-radius: 1em;
 }
 
+.roboto {
+   font-family: roboto;
+}
+
 
 .worldControlsDiv {
    grid-area: worldControlsDiv;
@@ -153,6 +157,7 @@ label {
 }
 
 .descriptionText {
+   font-family: roboto;
    text-align: left;
 }
 
