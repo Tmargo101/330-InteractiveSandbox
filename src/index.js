@@ -55,10 +55,13 @@ function init() {
       canvasClicked(e);
    });
    canvas.addEventListener("mousemove", function(e) {
-      console.log(windowParams.freehandDrawing);
       if (drawing && windowParams.freehandDrawing == true) {
          canvasClicked(e);
       }
+   });
+
+   canvas.addEventListener("mouseout", function(e) {
+      drawing = false;
    });
 
    // Create the world & generate random board if enabled
@@ -203,29 +206,41 @@ function canvasClicked(e){
    // let sub = txmLIB.firstDigit(lifeParams.cellSize);
    let mouseX = Math.round((e.clientX - rect.x) / lifeParams.cellSize - offset);
    let mouseY = Math.round((e.clientY - rect.y) / lifeParams.cellSize - offset);
-   console.log(`mouseX: ${mouseX}, mouseY: ${mouseY}`);
    switch (UI.shapeSelector.value) {
-      case "gun":
+      case "glider":
          createGlider(mouseX, mouseY);
          break;
+      case "spaceship":
+         createSpaceship(mouseX, mouseY);
+         break;
+      case "firework":
+         createFirework(mouseX, mouseY);
+         break;
+      case "random":
+         createShotgun(mouseX, mouseY);
+         break;
       default:
-         drawNewCell(mouseX, mouseY, 1)
+         drawNewCell(mouseX, mouseY)
          break;
 
    }
-   // console.log(mouseX,mouseY);
 }
 
 function drawNewCell(x, y, ignoreExisting = false) {
-   if (lifeWorld.getCell(x, y) == 1 && ignoreExisting != true) {
-      lifeWorld.changeCell(x, y, 0);
-      drawCell(x,y,lifeParams.cellSize, 0);
-   } else {
+   if (lifeWorld.getCell(x, y) == 1 && ignoreExisting == true) {
+      lifeWorld.changeCell(x, y, 1);
+      drawCell(x,y,lifeParams.cellSize, 2);
+   } else if (lifeWorld.getCell(x, y) == 1) {
+     lifeWorld.changeCell(x, y, 0);
+     drawCell(x,y,lifeParams.cellSize, 0);
+  } else {
       lifeWorld.changeCell(x, y, 1);
       drawCell(x, y, lifeParams.cellSize, 2);
    }
 
 }
+
+// Draw a glider
 function createGlider(mouseX, mouseY) {
    // TODO: Create shapes array to hold shape data?
    drawNewCell(mouseX - 1, mouseY - 1, true);
@@ -233,6 +248,36 @@ function createGlider(mouseX, mouseY) {
    drawNewCell(mouseX + 1, mouseY - 1, true);
    drawNewCell(mouseX - 1, mouseY, true);
    drawNewCell(mouseX, mouseY + 1, true);
+}
+
+// Draw a firework
+function createFirework(mouseX, mouseY) {
+   drawNewCell(mouseX, mouseY);
+   drawNewCell(mouseX, mouseY + 2);
+   drawNewCell(mouseX, mouseY + 3);
+   drawNewCell(mouseX, mouseY + 4);
+   drawNewCell(mouseX, mouseY - 2);
+   drawNewCell(mouseX, mouseY - 3);
+   drawNewCell(mouseX, mouseY - 4);
+   drawNewCell(mouseX + 2, mouseY);
+   drawNewCell(mouseX + 3, mouseY);
+   drawNewCell(mouseX + 4, mouseY);
+   drawNewCell(mouseX - 2, mouseY);
+   drawNewCell(mouseX - 3, mouseY);
+   drawNewCell(mouseX - 4, mouseY);
+}
+
+// Draw a spaceship
+function createSpaceship(mouseX, mouseY) {
+   drawNewCell(mouseX - 1, mouseY - 1);
+   drawNewCell(mouseX - 2, mouseY);
+   drawNewCell(mouseX - 2, mouseY + 1);
+   drawNewCell(mouseX - 2, mouseY + 2);
+   drawNewCell(mouseX - 1, mouseY + 2);
+   drawNewCell(mouseX, mouseY + 2);
+   drawNewCell(mouseX + 1, mouseY + 2);
+   drawNewCell(mouseX + 2, mouseY + 1);
+   drawNewCell(mouseX + 2, mouseY - 1);
 }
 
 

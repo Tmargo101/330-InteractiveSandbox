@@ -4,12 +4,6 @@
 
 (function (){
    let txmLIB = {
-      createCity(ctx, citySize){
-         switch (citySize) {
-            case "large":
-               break;
-         }
-      },
 
       doExport(canvas) {
          const data = canvas.toDataURL();
@@ -20,14 +14,6 @@
       clearCanvas(ctx, windowParams) {
          ctx.clearRect(0,0,windowParams.canvasWidth,windowParams.canvasHeight);
       },
-
-      // firstDigit(inNumber) {
-      //    let num = inNumber;
-      //    while (num >= 10)
-      //       num /= 10;
-      //    return num;
-      // },
-
 
 
    };
