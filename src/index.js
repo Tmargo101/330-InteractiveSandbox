@@ -49,7 +49,6 @@ function init() {
 
    // Create the world & generate random board if enabled
    lifeWorld = new Lifeworld(lifeParams.numRows,lifeParams.numCols,lifeParams.percentAlive);
-   txmLIB.drawGrid(ctx, lifeParams, windowParams, lifeWorld);
 
    if (lifeParams.randomSetupOnNext == true) {
       lifeWorld.randomSetup();
