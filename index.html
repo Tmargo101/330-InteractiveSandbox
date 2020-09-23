@@ -24,16 +24,27 @@
                <section id="playPauseControls">
                   <h2>Play / Pause Controls</h2>
                   <hr>
-                  <button id="playPauseButton">Play</button>
+                  <button id="playPauseButton">Pause</button>
                   <button id="stepButton">Step forward 1 frame</button>
+
                   <hr>
-                  <label class='roboto'> Steps per second:<br>
-                     <span>1</span>
-                     <input type="range" min="1" max="20" value="10" id="fpsSlider">
-                     <span>20</span>
-                     <br>
-                     <span id="fpsDisplay">Current: 10</span>
-                  </label>
+                  <div class='stepsDiv'>
+                     <div class='stepsSliderDiv'>
+                        <label class='roboto'> Steps per second:<br>
+                           <span>1</span>
+                           <input type="range" min="1" max="20" value="10" id="fpsSlider">
+                           <span>20</span>
+                           <br>
+                           <span id="fpsDisplay">Current: 10</span>
+                        </label>
+                     </div>
+                     <div class='gridDiv'>
+                        <br><br>
+                        <label>Grid:
+                           <input type="checkbox" id="gridCheckbox">
+                        </label>
+                     </div>
+                  </div>
                   <hr>
                   <div class="fadeOutDiv">
                      <div class="fadeOutCheckboxDiv">
@@ -80,7 +91,8 @@
                      <div class="themeSelectorDiv">
                         <label class='roboto'>Theme:
                            <select id="themeSelector">
-                              <option value="colors" selected>Colors</option>
+                              <option value="colors" selected>Squares</option>
+                              <option value="circles">Circles</option>
                               <option value="emoji">Emoji</option>
                            </select>
                         </label>
@@ -125,6 +137,8 @@
          <div class="descriptionDiv">
             <h2>About Conway's Game of Life</h2>
             <div class="descriptionText">
+               <p>A description of what conway's game of life IS goes here, with a link to learn more about it.</p>
+               <p>if there is extra space, explain some of the buttons or modes</p>
                <ul>
                   <li>Item 1</li>
                   <li>Item 1</li>

@@ -3,16 +3,17 @@
 
 'use strict';
 let canvas, ctx;
-let paused = true, drawing = false;
+let paused = false, drawing = false;
 
 const windowParams = {
    "fps" : 10,
-   "fadeOut" : false,
-   "fadeSpeed" : 5,
+   "fadeOut" : true,
+   "fadeSpeed" : 3,
    "canvasWidth" :  800,
    "canvasHeight" : 600,
    "freehandDrawing" : false,
-   "theme" : "colors"
+   "theme" : "colors",
+   "drawGrid" : false
 }
 
 
@@ -22,7 +23,7 @@ const lifeParams = {
    "numRows" : 80,
    "numCols" : 60,
    "percentAlive" : 0.2,
-   "randomSetupOnNext" : false
+   "randomSetupOnNext" : true
 }
 
 const UI = {
@@ -48,6 +49,8 @@ function init() {
 
    // Create the world & generate random board if enabled
    lifeWorld = new Lifeworld(lifeParams.numRows,lifeParams.numCols,lifeParams.percentAlive);
+   txmLIB.drawGrid(ctx, lifeParams, windowParams, lifeWorld);
+
    if (lifeParams.randomSetupOnNext == true) {
       lifeWorld.randomSetup();
    }
@@ -84,20 +87,19 @@ function setupButtons() {
    UI.percentAliveDisplay = document.querySelector('#percentAliveDisplay');
    UI.gridSizeSelector = document.querySelector('#gridSize');
    UI.themeSelector = document.querySelector('#themeSelector');
+   UI.gridCheckbox = document.querySelector('#gridCheckbox');
 
 
    // Set controls to values from code
    UI.fpsSlider.value = windowParams.fps;
    UI.fpsDisplay.innerHTML = `Current: ${windowParams.fps}`;
-   UI.fadeOutCheckbox.value = windowParams.fadeOut;
+   UI.fadeOutCheckbox.checked = windowParams.fadeOut;
    UI.fadeSpeedSlider.value = windowParams.fadeSpeed;
    UI.randomSetupCheckbox.checked = lifeParams.randomSetupOnNext;
    UI.freehandDrawingCheckbox.checked = windowParams.freehandDrawing;
    UI.themeSelector.value = windowParams.theme;
+   UI.stepButton.disabled = true;
 
-   // Disable controls
-   UI.fadeSpeedSlider.disabled = true;
-   UI.percentAliveSlider.disabled = true;
 }
 
 function assignEventHandlers() {
@@ -148,6 +150,10 @@ function assignEventHandlers() {
       UI.fadeSpeedSlider.disabled = !UI.fadeSpeedSlider.disabled;
    }
 
+   UI.gridCheckbox.onchange = function() {
+      windowParams.drawGrid = !windowParams.drawGrid;
+   }
+
    // Change fade speed
    UI.fadeSpeedSlider.oninput = function() {
       windowParams.fadeSpeed = this.value;
@@ -159,6 +165,7 @@ function assignEventHandlers() {
       lifeParams.randomSetupOnNext = !lifeParams.randomSetupOnNext;
       UI.percentAliveSlider.disabled = !UI.percentAliveSlider.disabled;
    }
+
 
    // Change percent of cells alive on next world rebuild
    UI.percentAliveSlider.oninput = function() {
@@ -204,7 +211,7 @@ function canvasClicked(e){
          offset = 0.5;
          break;
    }
-   
+
    // let sub = txmLIB.firstDigit(lifeParams.cellSize);
    let mouseX = Math.round((e.clientX - rect.x) / lifeParams.cellSize - offset);
    let mouseY = Math.round((e.clientY - rect.y) / lifeParams.cellSize - offset);
@@ -228,28 +235,33 @@ function canvasClicked(e){
    }
 }
 
-function drawNewCell(x, y, ignoreExisting = false) {
-   if (lifeWorld.getCell(x, y) == 1 && ignoreExisting == true) {
+function drawNewCell(x, y) {
+   if (lifeWorld.newWorld[x][y] == 1) {
+      // If the cell is alive, change it to alive in the arrary & draw the 'new cell'
       lifeWorld.changeCell(x, y, 1);
       drawCell(x,y,lifeParams.cellSize, 2);
-   } else if (lifeWorld.getCell(x, y) == 1) {
-     lifeWorld.changeCell(x, y, 0);
-     drawCell(x,y,lifeParams.cellSize, 3);
-  } else {
+   } else if (lifeWorld.newWorld[x][y] == 0) {
+      // If the cell is dead, change it to alive in the array & draw the 'new cell'
       lifeWorld.changeCell(x, y, 1);
       drawCell(x, y, lifeParams.cellSize, 2);
    }
 
+  //  else if (lifeWorld.newWorld[x][y] == 1) {
+  //     console.log("Cell exists & ignore is false");
+  //
+  //     // If the cell is alive and we're NOT ignoring that, kill the cell & redraw it as black
+  //    lifeWorld.changeCell(x, y, 0);
+  //    drawCell(x,y,lifeParams.cellSize, 3);
+  // }
 }
 
 // Draw a glider
 function createGlider(mouseX, mouseY) {
-   // TODO: Create shapes array to hold shape data?
-   drawNewCell(mouseX - 1, mouseY - 1, true);
-   drawNewCell(mouseX, mouseY - 1, true);
-   drawNewCell(mouseX + 1, mouseY - 1, true);
-   drawNewCell(mouseX - 1, mouseY, true);
-   drawNewCell(mouseX, mouseY + 1, true);
+   drawNewCell(mouseX - 1, mouseY - 1);
+   drawNewCell(mouseX, mouseY - 1);
+   drawNewCell(mouseX + 1, mouseY - 1);
+   drawNewCell(mouseX - 1, mouseY);
+   drawNewCell(mouseX, mouseY + 1);
 }
 
 // Draw a firework
@@ -306,6 +318,7 @@ function loop(){
    setTimeout(loop,1000/windowParams.fps);
    // TODO: update lifeworld
    if (!paused) {
+      if (windowParams.drawGrid) {txmLIB.drawGrid(ctx, lifeParams, windowParams, lifeWorld);}
       drawBackground();
       drawWorld();
       lifeWorld.step();
@@ -341,38 +354,34 @@ alive states:
    let img;
    switch (alive) {
       case 1:
-         ctx.beginPath();
          if (windowParams.theme == "emoji") {
             if (dimensions == 10) {img = document.querySelector("#smallEmoji");}
             if (dimensions == 20) {img = document.querySelector("#largeEmoji");}
-            ctx.drawImage(img, col*dimensions, row*dimensions);
+            txmLIB.drawImageOnGrid(ctx, col, row, dimensions, img);
+         } else if (windowParams.theme == "circles") {
+            txmLIB.drawCircleOnGrid(ctx, col, row, dimensions, "#2a9d8f");
          } else {
-            ctx.fillStyle = "#2a9d8f";
-            ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
+            txmLIB.drawSquareOnGrid(ctx, col, row, dimensions, "#2a9d8f");
          }
 
-         ctx.fill();
          break;
       case 2:
-         ctx.beginPath();
          if (windowParams.theme == "emoji") {
             if (dimensions == 10) {img = document.querySelector("#smallBaby");}
             if (dimensions == 20) {img = document.querySelector("#largeBaby");}
-            ctx.drawImage(img, col*dimensions, row*dimensions);
+            txmLIB.drawImageOnGrid(ctx, col, row, dimensions, img);
+         } else if (windowParams.theme == "circles") {
+            txmLIB.drawCircleOnGrid(ctx, col, row, dimensions, "#2a9d8f");
          } else {
-            ctx.fillStyle = "#e76f51";
-            ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
+            txmLIB.drawSquareOnGrid(ctx, col, row, dimensions, "#e76f51");
          }
-         // ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
-
-         ctx.fill();
          break;
       case 3:
-         ctx.beginPath();
-         ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
-         ctx.fillStyle = "black";
-         ctx.fill();
-
+         if (windowParams.theme == "circles") {
+            txmLIB.drawCircleOnGrid(ctx, col, row, dimensions, "black");
+         } else {
+            txmLIB.drawSquareOnGrid(ctx, col, row, dimensions, "black");
+         }
          break;
       default:
          break;
