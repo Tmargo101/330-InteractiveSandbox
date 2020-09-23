@@ -4,13 +4,15 @@
 'use strict';
 let canvas, ctx;
 let paused = true;
+let drawing = false;
 
 const windowParams = {
    "fps" : 10,
    "fadeOut" : false,
    "fadeSpeed" : 5,
    "canvasWidth" :  800,
-   "canvasHeight" : 600
+   "canvasHeight" : 600,
+   "freehandDrawing" : false
 }
 
 
@@ -43,9 +45,23 @@ function init() {
    assignEventHandlers();
 
    //Add click ability to canvasWidth
-   canvas.onclick = canvasClicked;
+   // canvas.onclick = canvasClicked;
+   // canvas.addEventListener("touchmove", canvasClicked);
+   canvas.addEventListener("mouseup", function() {
+      drawing = false;
+   });
+   canvas.addEventListener("mousedown", function(e) {
+      drawing = true;
+      canvasClicked(e);
+   });
+   canvas.addEventListener("mousemove", function(e) {
+      console.log(windowParams.freehandDrawing);
+      if (drawing && windowParams.freehandDrawing == true) {
+         canvasClicked(e);
+      }
+   });
 
-   // Create the world
+   // Create the world & generate random board if enabled
    lifeWorld = new Lifeworld(lifeParams.numRows,lifeParams.numCols,lifeParams.percentAlive);
    if (lifeParams.randomSetupOnNext == true) {
       lifeWorld.randomSetup();
@@ -70,6 +86,7 @@ function setupButtons() {
 
    // Creation Controls
    UI.shapeSelector = document.querySelector('#shapeType');
+   UI.freehandDrawingCheckbox = document.querySelector('#freehandDrawingCheckbox');
 
    // World controls
    UI.clearButton = document.querySelector('#clearButton');
@@ -89,6 +106,7 @@ function setupButtons() {
    UI.fadeOutCheckbox.value = windowParams.fadeOut;
    UI.fadeSpeedSlider.value = windowParams.fadeSpeed;
    UI.randomSetupCheckbox.checked = lifeParams.randomSetupOnNext;
+   UI.freehandDrawingCheckbox.checked = windowParams.freehandDrawing;
 
    // Disable controls
    UI.fadeSpeedSlider.disabled = true;
@@ -123,6 +141,11 @@ function assignEventHandlers() {
    }
 
    // Creation Controls
+
+   UI.freehandDrawingCheckbox.onchange = function() {
+      windowParams.freehandDrawing = !windowParams.freehandDrawing;
+      // UI.percentAliveSlider.disabled = !UI.percentAliveSlider;
+   }
 
    // World Controls
 
@@ -174,15 +197,13 @@ function canvasClicked(e){
          offset = 1;
          break;
       case 20:
-         offset = 0;
+         offset = 0.5;
          break;
    }
    // let sub = txmLIB.firstDigit(lifeParams.cellSize);
-   console.log(`clientRectX: ${e.clientX}, rectX = ${rect.x}`)
-   let mouseX = Math.round((e.clientX - rect.x) / lifeParams.cellSize) - 1;
-   let mouseY = Math.round((e.clientY - rect.y) / lifeParams.cellSize) - 1;
+   let mouseX = Math.round((e.clientX - rect.x) / lifeParams.cellSize - offset);
+   let mouseY = Math.round((e.clientY - rect.y) / lifeParams.cellSize - offset);
    console.log(`mouseX: ${mouseX}, mouseY: ${mouseY}`);
-   console.log(UI.shapeSelector.value);
    switch (UI.shapeSelector.value) {
       case "gun":
          createGlider(mouseX, mouseY);
@@ -195,24 +216,23 @@ function canvasClicked(e){
    // console.log(mouseX,mouseY);
 }
 
-function drawNewCell(x, y, cellStatus) {
-   if (lifeWorld.getCell(x, y) == 1) {
-      console.log("Cell occupied");
+function drawNewCell(x, y, ignoreExisting = false) {
+   if (lifeWorld.getCell(x, y) == 1 && ignoreExisting != true) {
       lifeWorld.changeCell(x, y, 0);
       drawCell(x,y,lifeParams.cellSize, 0);
    } else {
-      lifeWorld.changeCell(x, y, cellStatus);
+      lifeWorld.changeCell(x, y, 1);
       drawCell(x, y, lifeParams.cellSize, 2);
    }
 
 }
 function createGlider(mouseX, mouseY) {
    // TODO: Create shapes array to hold shape data?
-   drawNewCell(mouseX - 1, mouseY - 1, 1);
-   drawNewCell(mouseX, mouseY - 1, 1);
-   drawNewCell(mouseX + 1, mouseY - 1, 1);
-   drawNewCell(mouseX - 1, mouseY, 1);
-   drawNewCell(mouseX, mouseY + 1, 1);
+   drawNewCell(mouseX - 1, mouseY - 1, true);
+   drawNewCell(mouseX, mouseY - 1, true);
+   drawNewCell(mouseX + 1, mouseY - 1, true);
+   drawNewCell(mouseX - 1, mouseY, true);
+   drawNewCell(mouseX, mouseY + 1, true);
 }
 
 
@@ -263,8 +283,6 @@ function drawWorld(){
 }
 
 function drawCell(col,row,dimensions,alive) {
-	/// TODO: implement states
-   /// Alive: 0 = dead, 1 = alive, 2 = newly created, 3 = dying
 
    switch (alive) {
       case 0:
@@ -276,7 +294,11 @@ function drawCell(col,row,dimensions,alive) {
          break;
       case 1:
          ctx.beginPath();
-         let img = document.querySelector("#emoji");
+         let img;
+         if (dimensions == 10) {img = document.querySelector("#smallEmoji");}
+         if (dimensions == 20) {img = document.querySelector("#largeEmoji");}
+
+
          ctx.drawImage(img, col*dimensions, row*dimensions);
          ctx.fill();
          break;
