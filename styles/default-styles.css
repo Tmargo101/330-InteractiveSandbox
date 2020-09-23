@@ -1,31 +1,141 @@
 /* Interactive Sandbox */
 
+body {
+   background-color: lightgray;
+}
 canvas {
    border: 2px solid #ccc;
+   border-radius: 1em;
+   padding-left: 0;
+   padding-right: 0;
+   margin-left: auto;
+   margin-right: auto;
+   display: block;
 }
 
 button {
-   font-size: 1.2em;
+   /* display: block; */
+   padding: 1%;
+   margin-left: auto;
+   margin-right: auto;
+   font-size: 1.25em;
 }
 
-#topRow {
-  /* width: 80%;
-  height: 200px;
-  background: aqua;
-  margin: auto;
-  padding: 10px; */
+select {
+   width: 75%;
+   margin-left: auto;
+   margin-right: auto;
+   display: block;
 }
 
-#canvasDiv {
-  /* width: 80%;
-  height: 200px;
-  background: red;
-  float: left; */
+input[type=range] {
+  height: 34px;
+  width: 50%;
 }
 
-#playPauseControlsDiv {
-  /* margin-left: 15%;
-  height: 200px;
-  background: black;
-  float: right; */
+label {
+   font-size: 1em;
+}
+
+
+
+
+.hiddenDiv {
+   display: none;
+}
+
+
+
+.grid-container {
+   text-align: center;
+  display: grid;
+  grid-template-columns: auto max-content 15% 25% auto;
+  grid-template-rows: 7% max-content 20% max-content;
+  gap: 2% 2%;
+  grid-template-areas:
+  "headingDiv headingDiv headingDiv headingDiv headingDiv"
+  ". canvasDiv canvasDiv controlsDiv ."
+  ". creationControlsDiv descriptionDiv descriptionDiv ."
+  "footerDiv footerDiv footerDiv footerDiv footerDiv";
+}
+.headingDiv {
+   grid-area: headingDiv;
+}
+
+.canvasDiv {
+   grid-area: canvasDiv;
+   background-color: gray;
+   border-radius: 1em;
+}
+
+.controlsDiv {
+   display: grid;
+   grid-template-columns: 1fr;
+   grid-template-rows: 0.9fr 1.1fr;
+   gap: 2% 2%;
+   grid-template-areas:
+     "playPauseControlsDiv"
+     "worldControlsDiv";
+   grid-area: controlsDiv;
+}
+.playPauseControlsDiv {
+   grid-area: playPauseControlsDiv;
+   background-color: orange;
+   border-radius: 1em;
+}
+
+.fadeOutDiv {
+  display: grid;
+  grid-template-columns: 0.7fr 1.3fr;
+  grid-template-rows: 1fr;
+  gap: 1% 1%;
+  grid-template-areas:
+    "cellSizeSelectorDiv themeSelectorDiv";
+}
+.fadeOutCheckboxDiv {
+   grid-area: cellSizeSelectorDiv;
+}
+.fadeOutSliderDiv {
+   grid-area: themeSelectorDiv;
+}
+
+
+.creationControlsDiv {
+   grid-area: creationControlsDiv;
+   background-color: red;
+   border-radius: 1em;
+}
+
+
+.worldControlsDiv {
+   grid-area: worldControlsDiv;
+   background-color: green;
+   border-radius: 1em;
+}
+.selectorsDiv {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 1% 1%;
+  grid-template-areas:
+    "cellSizeSelectorDiv themeSelectorDiv";
+   margin: auto;
+}
+.cellSizeSelectorDiv {
+   grid-area: cellSizeSelectorDiv;
+}
+.themeSelectorDiv {
+   grid-area: themeSelectorDiv;
+}
+
+.descriptionDiv {
+   grid-area: descriptionDiv;
+   background-color: gray;
+   border-radius: 1em;
+}
+
+.footerDiv {
+   grid-area: footerDiv;
+   background-color: purple;
+   border-radius: 1em;
 }

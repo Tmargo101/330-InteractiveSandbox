@@ -4,108 +4,145 @@
       <meta charset="utf-8">
       <title>IGME-330 Project 1</title>
       <link href="styles/default-styles.css" rel="stylesheet"/>
+
       <script src="src/Lifeworld.js"></script>
       <script src="src/txmLIB.js"></script>
       <script src="src/index.js"></script>
    </head>
    <body>
       <!-- TODO: Add popup when loaded to set default options; dismissing starts playing. -->
-      <div id="topRow">
-         <div id="canvasDiv">
+      <div class="grid-container">
+
+         <div class="headingDiv">
+            <h1>Conway's Game of Life</h1>
+         </div>
+
+         <div class="canvasDiv">
             <canvas></canvas>
          </div>
-         <div id="playPauseControlsDiv">
-            <section id="playPauseControls">
-               <h2>Play / Pause Controls</h2>
-               <button id="playPauseButton">Play</button><br>
-               <br>
-               <label> Steps per second:<br>
-                  <span>1</span>
-                  <input type="range" min="1" max="20" value="10" id="fpsSlider">
-                  <span>20</span>
-                  <br>
-                  <span id="fpsDisplay">Current: 10</span>
-               </label>
-               <br>
-               <button id="stepButton">Step forward 1 frame</button>
-
-               <br>
-               <label>Fade Out: <input type="checkbox" id="fadeOutCheckbox"></label>
-
-               <br>
-
-
-               <label>Speed:<br>
-                  <span>Slow</span><input type="range" min="1" max="10" value="5" id="fadeSpeedSlider"><span>Fast</span><br>
-               </label>
-
+         <div class="controlsDiv">
+            <div class="playPauseControlsDiv">
+               <section id="playPauseControls">
+                  <h2>Play / Pause Controls</h2>
+                  <hr>
+                  <button id="playPauseButton">Play</button>
+                  <button id="stepButton">Step forward 1 frame</button>
+                  <hr>
+                  <label> Steps per second:<br>
+                     <span>1</span>
+                     <input type="range" min="1" max="20" value="10" id="fpsSlider">
+                     <span>20</span>
+                     <br>
+                     <span id="fpsDisplay">Current: 10</span>
+                  </label>
+                  <hr>
+                  <div class="fadeOutDiv">
+                     <div class="fadeOutCheckboxDiv">
+                        <br>
+                        <label>Fade Out:
+                           <input type="checkbox" id="fadeOutCheckbox">
+                        </label>
+                     </div>
+                     <div class="fadeOutSliderDiv">
+                        <label>
+                           <span>Slow</span><input type="range" min="1" max="10" value="5" id="fadeSpeedSlider"><span>Fast</span><br><br>
+                        </label>
+                     </div>
+                  </div>
+               </section>
+            </div>
+            <div class="worldControlsDiv">
+               <section id="worldControls">
+                  <h2>World Controls</h2>
+                  <hr>
+                  <div class="fadeOutDiv">
+                     <div class="fadeOutCheckboxDiv">
+                        <br>
+                        <label>Generate Random on Rebuild:
+                           <input type="checkbox" id="randomSetupCheckbox" checked>
+                        </label>
+                     </div>
+                     <div class="fadeOutSliderDiv">
+                        <label> Percent Alive:<br>
+                           <span>5%</span><input type="range" min="5" max="50" value="10" id="percentAliveSlider"><span>50%</span><br><span id="percentAliveDisplay">Current: 10%</span>
+                        </label>
+                     </div>
+                  </div>
+                  <hr>
+                  <div class="selectorsDiv">
+                     <div class="cellSizeSelectorDiv">
+                        <label>Cell Size:
+                           <select id="gridSize">
+                              <option value="small" selected>Small (80x60)</option>
+                              <option value="large">Large (40x30)</option>
+                           </select>
+                        </label>
+                     </div>
+                     <div class="themeSelectorDiv">
+                        <label>Theme:
+                           <select id="themeSelector">
+                              <option value="colors" selected>Colors</option>
+                              <option value="emoji">Emoji</option>
+                           </select>
+                        </label>
+                     </div>
+                  </div>
+                  <br><hr>
+                  <button id="rebuildWorldButton">Rebuild World</button>
+                  <button id="exportButton" type="button" value="Export">Snapshot Current World</button>
+               </section>
+            </div>
+         </div>
+         <div class="creationControlsDiv">
+            <section id="createObjectControls">
+               <h2>Creation Controls</h2>
+               <div class="fadeOutDiv">
+                  <div class="fadeOutCheckboxDiv">
+                     <br>
+                     <label>Freehand drawing:
+                        <input type="checkbox" id="freehandDrawingCheckbox">
+                     </label>
+                  </div>
+                  <div class="fadeOutSliderDiv">
+                     <label>Draw shape:
+                        <select id="shapeType">
+                           <option value="single" selected>Single Pixel</option>
+                           <option value="spaceship">Spaceship</option>
+                           <option value="glider">Glider</option>
+                           <option value="firework">Firework</option>
+                           <option value="shotgun">Shotgun</option>
+                        </select>
+                     </label>
+                  </div>
+               </div>
             </section>
          </div>
+
+         <div class="descriptionDiv">
+            <h2>Conway's Game of Life</h2>
+            <ul>
+               <li>Item 1</li>
+               <li>Item 1</li>
+
+               <li>Item 1</li>
+               <li>Item 1</li>
+               <li>Item 1</li>
+               <li>Item 1</li>
+
+            </ul>
+         </div>
+         <div class="footerDiv">
+            <p>Tom Margosian</p>
+         </div>
       </div>
-      <hr>
 
-      <section id="createObjectControls">
-         <h2>Creation Controls</h2>
-
-         <label>Shape:
-            <select id="shapeType">
-               <option value="single" selected>Single Pixel</option>
-               <option value="spaceship">Spaceship</option>
-               <option value="glider">Glider</option>
-               <option value="firework">Firework</option>
-               <option value="shotgun">Shotgun</option>
-            </select>
-         </label>
-         <label>Freehand drawing:<input type="checkbox" id="freehandDrawingCheckbox"></label>
-      </section>
-
-      <hr>
-
-      <section id="worldControls">
-         <h2>World Controls</h2>
-
-         <button id="exportButton" type="button" value="Export">Export</button>
-
-         <br>
-
-         <label>Generate Random on Rebuild:<input type="checkbox" id="randomSetupCheckbox" checked></label>
-         <br>
-         <label> Percent Alive:<br>
-            <span>5%</span><input type="range" min="5" max="50" value="10" id="percentAliveSlider"><span>50%</span><br><span id="percentAliveDisplay">Current: 10%</span>
-         </label>
-
-         <br>
-         <label>Cell Size:
-            <select id="gridSize">
-               <option value="small" selected>Small (80x60)</option>
-               <option value="large">Large (40x30)</option>
-            </select>
-         </label>
-
-         <br>
-
-         <label>Theme:
-            <select id="themeSelector">
-               <option value="colors" selected>Colors</option>
-               <option value="emoji">Emoji</option>
-            </select>
-         </label>
-
-
-         <button id="rebuildWorldButton">Rebuild World</button>
-
-
-
-      </section>
-
-      <hr>
-
+<div class="hiddenDiv">
       <img id="smallEmoji" alt="emoji" src="house-small.png" />
       <img id="largeEmoji" alt="emoji" src="house-large.png" />
 
       <img id="smallBaby" alt="emoji" src="building-small.png" />
       <img id="largeBaby" alt="emoji" src="building-large.png" />
-
+</div>
 
    </body>
 </html>
