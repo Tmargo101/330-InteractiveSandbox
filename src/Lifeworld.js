@@ -1,3 +1,5 @@
+'use strict';
+
 class Lifeworld {
 
    constructor(numCols = 60, numRows = 40, percentAlive = 0.1) {

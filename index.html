@@ -2,15 +2,13 @@
 <html lang="en">
    <head>
       <meta charset="utf-8">
-      <title>IGME-330 Project 1</title>
+      <title>Conway's Game of Life</title>
       <link href="styles/default-styles.css" rel="stylesheet"/>
-
       <script src="src/Lifeworld.js"></script>
       <script src="src/txmLIB.js"></script>
       <script src="src/index.js"></script>
    </head>
    <body>
-      <!-- TODO: Add popup when loaded to set default options; dismissing starts playing. -->
       <div class="grid-container">
 
          <div class="headingDiv">
@@ -93,17 +91,20 @@
                </section>
             </div>
          </div>
+
          <div class="creationControlsDiv">
             <section id="createObjectControls">
                <h2>Creation Controls</h2>
+               <hr>
                <div class="fadeOutDiv">
                   <div class="fadeOutCheckboxDiv">
-                     <br>
+                     <br><br>
                      <label>Freehand drawing:
                         <input type="checkbox" id="freehandDrawingCheckbox">
                      </label>
                   </div>
                   <div class="fadeOutSliderDiv">
+                     <br>
                      <label>Draw shape:
                         <select id="shapeType">
                            <option value="single" selected>Single Pixel</option>
@@ -115,31 +116,35 @@
                      </label>
                   </div>
                </div>
+               <hr>
+               <p>Click anywhere on the canvas to draw the shape you<br>have selected.
+               If the 'Freehand Drawing' option is checked, you<br>can drag your mouse around the canvas to draw.</p><br>
             </section>
          </div>
-
          <div class="descriptionDiv">
-            <h2>Conway's Game of Life</h2>
-            <ul>
-               <li>Item 1</li>
-               <li>Item 1</li>
+            <h2>About Conway's Game of Life</h2>
+            <div class="descriptionText">
+               <ul>
+                  <li>Item 1</li>
+                  <li>Item 1</li>
 
-               <li>Item 1</li>
-               <li>Item 1</li>
-               <li>Item 1</li>
-               <li>Item 1</li>
+                  <li>Item 1</li>
+                  <li>Item 1</li>
+                  <li>Item 1</li>
+                  <li>Item 1</li>
 
-            </ul>
+               </ul>
+            </div>
          </div>
+
          <div class="footerDiv">
-            <p>Tom Margosian</p>
+            <p>IGME-330 Project 1.  Tom Margosian 2020.</p>
          </div>
       </div>
 
 <div class="hiddenDiv">
       <img id="smallEmoji" alt="emoji" src="house-small.png" />
       <img id="largeEmoji" alt="emoji" src="house-large.png" />
-
       <img id="smallBaby" alt="emoji" src="building-small.png" />
       <img id="largeBaby" alt="emoji" src="building-large.png" />
 </div>

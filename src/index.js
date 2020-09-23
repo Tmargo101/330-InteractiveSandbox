@@ -157,7 +157,7 @@ function assignEventHandlers() {
    // Enable / disable random generation on next world rebuild
    UI.randomSetupCheckbox.onchange = function() {
       lifeParams.randomSetupOnNext = !lifeParams.randomSetupOnNext;
-      UI.percentAliveSlider.disabled = !UI.percentAliveSlider;
+      UI.percentAliveSlider.disabled = !UI.percentAliveSlider.disabled;
    }
 
    // Change percent of cells alive on next world rebuild
@@ -204,6 +204,7 @@ function canvasClicked(e){
          offset = 0.5;
          break;
    }
+   
    // let sub = txmLIB.firstDigit(lifeParams.cellSize);
    let mouseX = Math.round((e.clientX - rect.x) / lifeParams.cellSize - offset);
    let mouseY = Math.round((e.clientY - rect.y) / lifeParams.cellSize - offset);
@@ -346,7 +347,7 @@ alive states:
             if (dimensions == 20) {img = document.querySelector("#largeEmoji");}
             ctx.drawImage(img, col*dimensions, row*dimensions);
          } else {
-            ctx.fillStyle = "yellow";
+            ctx.fillStyle = "#2a9d8f";
             ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
          }
 
@@ -359,7 +360,7 @@ alive states:
             if (dimensions == 20) {img = document.querySelector("#largeBaby");}
             ctx.drawImage(img, col*dimensions, row*dimensions);
          } else {
-            ctx.fillStyle = "red";
+            ctx.fillStyle = "#e76f51";
             ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);
          }
          // ctx.rect(col*dimensions, row*dimensions, dimensions, dimensions);

@@ -1,8 +1,10 @@
 /* Interactive Sandbox */
 
 body {
-   background-color: lightgray;
+   background-color: #264653;
+   font-family: sans-serif;
 }
+
 canvas {
    border: 2px solid #ccc;
    border-radius: 1em;
@@ -12,6 +14,21 @@ canvas {
    margin-right: auto;
    display: block;
 }
+
+h1 {
+   color: white;
+}
+
+h2 {
+
+}
+
+hr {
+  border: 2px solid;
+  border-radius: 2px;
+  width: 90%;
+}
+
 
 button {
    /* display: block; */
@@ -26,6 +43,7 @@ select {
    margin-left: auto;
    margin-right: auto;
    display: block;
+   font-size: 1.05em;
 }
 
 input[type=range] {
@@ -56,7 +74,7 @@ label {
   "headingDiv headingDiv headingDiv headingDiv headingDiv"
   ". canvasDiv canvasDiv controlsDiv ."
   ". creationControlsDiv descriptionDiv descriptionDiv ."
-  "footerDiv footerDiv footerDiv footerDiv footerDiv";
+  ". creationControlsDiv descriptionDiv descriptionDiv .";
 }
 .headingDiv {
    grid-area: headingDiv;
@@ -80,7 +98,7 @@ label {
 }
 .playPauseControlsDiv {
    grid-area: playPauseControlsDiv;
-   background-color: orange;
+   background-color: #f4a261;
    border-radius: 1em;
 }
 
@@ -102,14 +120,14 @@ label {
 
 .creationControlsDiv {
    grid-area: creationControlsDiv;
-   background-color: red;
+   background-color: #e76f51;
    border-radius: 1em;
 }
 
 
 .worldControlsDiv {
    grid-area: worldControlsDiv;
-   background-color: green;
+   background-color: #2a9d8f;
    border-radius: 1em;
 }
 .selectorsDiv {
@@ -130,12 +148,17 @@ label {
 
 .descriptionDiv {
    grid-area: descriptionDiv;
-   background-color: gray;
+   background-color: #e9c46a;
    border-radius: 1em;
 }
 
+.descriptionText {
+   text-align: left;
+}
+
 .footerDiv {
+   display: none;
    grid-area: footerDiv;
-   background-color: purple;
    border-radius: 1em;
+   color: lightgray;
 }
