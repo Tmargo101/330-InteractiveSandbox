@@ -224,22 +224,25 @@ function canvasClicked(e){
       case "firework":
          createFirework(mouseX, mouseY);
          break;
-      case "random":
-         createShotgun(mouseX, mouseY);
+      case "snowflake":
+         createSnowflake(mouseX, mouseY);
          break;
       default:
-         drawNewCell(mouseX, mouseY)
+         drawNewCell(mouseX, mouseY, false)
          break;
 
    }
 }
 
-function drawNewCell(x, y) {
-   if (lifeWorld.newWorld[x][y] == 1) {
-      // If the cell is alive, change it to alive in the arrary & draw the 'new cell'
+function drawNewCell(x, y, ignoreExisting = true) {
+   if (lifeWorld.getCell(x, y) == 1 && ignoreExisting == true) {
       lifeWorld.changeCell(x, y, 1);
-      drawCell(x,y,lifeParams.cellSize, 2);
-   } else if (lifeWorld.newWorld[x][y] == 0) {
+      drawCell(x, y, lifeParams.cellSize, 2);
+   } else if (lifeWorld.getCell(x, y) == 1 && ignoreExisting == false) {
+      // If the cell is alive, change it to dead in the arrary & draw the 'black cell'
+      lifeWorld.changeCell(x, y, 0);
+      drawCell(x,y,lifeParams.cellSize, 3);
+   } else if (lifeWorld.getCell(x, y) == 0) {
       // If the cell is dead, change it to alive in the array & draw the 'new cell'
       lifeWorld.changeCell(x, y, 1);
       drawCell(x, y, lifeParams.cellSize, 2);
@@ -291,6 +294,22 @@ function createSpaceship(mouseX, mouseY) {
    drawNewCell(mouseX + 1, mouseY + 2);
    drawNewCell(mouseX + 2, mouseY + 1);
    drawNewCell(mouseX + 2, mouseY - 1);
+}
+
+function createSnowflake(mouseX, mouseY) {
+   drawNewCell(mouseX + 2, mouseY - 1);
+   drawNewCell(mouseX + 1,  mouseY - 1);
+   drawNewCell(mouseX, mouseY - 1);
+   drawNewCell(mouseX - 1, mouseY - 1);
+   drawNewCell(mouseX - 2,  mouseY - 1);
+   drawNewCell(mouseX - 2, mouseY);
+   drawNewCell(mouseX - 2, mouseY + 1);
+   drawNewCell(mouseX - 1, mouseY + 1);
+   drawNewCell(mouseX, mouseY + 1);
+   drawNewCell(mouseX + 1, mouseY + 1);
+   drawNewCell(mouseX + 2, mouseY + 1);
+   drawNewCell(mouseX+ 2, mouseY);
+
 }
 
 // Resets grid & performs resize operation if selected

@@ -83,7 +83,9 @@ class Lifeworld {
    }
 
    getCell(inX, inY) {
-      return this.world[inX][inY]
+      if (inX < this.numCols && inY < this.numRows) {
+         return this.world[inX][inY]
+      }
    }
 
 
